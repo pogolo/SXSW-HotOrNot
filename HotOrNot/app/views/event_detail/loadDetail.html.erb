@@ -1,0 +1,28 @@
+﻿
+<% if @eventObj and @reportObj %>
+
+<h1><%= @eventObj.EventName.html_safe %></h1>
+<table>
+	<tr>
+		<td class="TableHead" style="width:75px;">ID</td>
+		<td><a href="<%= Settings.BaseEventURL %><%= @eventObj.CouchEventID %>" target="_blank" title="View SXSW Event Page"><%= @eventObj.CouchEventID %></a></td>	
+	</tr>
+	<tr>
+		<td class="TableHead" style="width:75px;">Event Date</td>
+		<td><%= @eventObj.EventDate.strftime('%A %B %d, %Y - %H:%M:%S%p') %></td>	
+	</tr>
+	<tr>
+		<td class="TableHead" style="width:75px;">Rank</td>
+		<td><%= @eventObj.Ranking %></td>	
+	</tr>
+	<tr>
+		<td class="TableHead" style="width:75px;">Capacity</td>
+		<td><%= @eventObj.RoomCapacity %></td>	
+	</tr>
+</table>
+	
+<% else %>
+
+	<h1>Record not found</h1>
+
+<% end %>

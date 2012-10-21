@@ -1,0 +1,81 @@
+﻿
+<!-- Query fields -->
+<fieldset><legend>Report Parameters</legend>
+
+<%= form_tag(:method => "get" ) do %>
+  <%= label_tag(:lblEventName, "Event Name:") %>
+  <%= text_field_tag 'txtEventName', @eventName %>
+  </br>
+  
+  <%= label_tag(:lblEventID, "Event ID:") %>
+  <%= text_field_tag 'txtEventID', @eventID %>
+  </br>
+  
+  <%= label_tag(:lblStartDate, "Start Date:") %>
+  <% if @startDate == nil %>
+		<%= select_date Date.today, :prefix => :startDate%>
+	<% else %>
+		<%= select_date @startDate, :prefix => :startDate%>
+	<% end %>
+  </br>
+  <%= label_tag(:lblEndDate, "End Date:") %>
+	<% if @endDate == nil %>		
+		<%= select_date Date.today, :prefix => :endDate %>  
+	<% else %>
+		<%= select_date @endDate, :prefix => :endDate %>  
+	<% end %>  
+  </br>
+  <%= submit_tag("Run Report") %>
+
+	<%= button_to "Save Ranking", :controller => :home, :action => :updateRanking %>
+</fieldset>
+
+Page Number:&nbsp;<%= @pageNumber %>
+</br>
+<%= session[:lastColumnName] %>
+</br>
+<%= will_paginate @result %>
+
+<br />
+<br />
+
+<!-- Report Starts -->
+<table>
+<tr>
+	<td class="TableHead"><%= link_to 'Event ID', :action => :performSort, :columName => "CouchEventID" %></td>
+	<td class="TableHead" style="width:75px;"><%= link_to 'Event Name', :action => :performSort, :columName => "EventName" %></td>
+	<td class="TableHead"><%= link_to 'Capacity', :action => :performSort, :columName => "Capacity" %></td>
+	<td class="TableHead"><%= link_to 'Initial Reg Adds', :action => :performSort, :columName => "RegCountStart" %></td>
+	<td class="TableHead"><%= link_to 'Final Reg Adds', :action => :performSort, :columName => "RegCountEnd" %></td>
+	<td class="TableHead"><%= link_to 'Registrations Added', :action => :performSort, :columName => "RegCountTotal" %></td>
+	<td class="TableHead"><%= link_to '% of Capacity', :action => :performSort, :columName => "CapacityPercent" %></td>	
+	<td class="TableHead"><%= link_to 'FB Initial Count', :action => :performSort, :columName => "FBCountStart" %></td>
+	<td class="TableHead"><%= link_to 'FB Final Count', :action => :performSort, :columName => "FBCountEnd" %></td>
+	<td class="TableHead"><%= link_to 'FB Likes', :action => :performSort, :columName => "FBCountTotal" %></td>
+	<td class="TableHead"><%= link_to 'Twitter Initial Count', :action => :performSort, :columName => "TwitterCountStart" %></td>
+	<td class="TableHead"><%= link_to 'Twitter Final Count', :action => :performSort, :columName => "TwitterCountEnd" %></td>
+	<td class="TableHead"><%= link_to 'Twitter Likes', :action => :performSort, :columName => "TwitterCountTotal" %></td>	
+</tr>
+<% if !@result.nil? %>
+	<% @result.each do |obj| %>
+		<tr>
+			<td><a href="/event/<%= obj.CouchEventID %>" target="_blank" title="View Detail"><%= obj.CouchEventID %></a></td>
+			<td><a href="<%= @eventURL %><%= obj.CouchEventID %>" target="_blank" title="View SXSW Event Page"><%= obj.EventName.html_safe %></a></td>
+			<td><%= obj.Capacity %></td>
+			<td><%= obj.RegCountStart %></td>
+			<td><%= obj.RegCountEnd %></td>
+			<td><%= obj.RegCountTotal %></td>
+			<td><%= obj.CapacityPercent %>%</td>
+			<td><%= obj.FBCountStart %></td>
+			<td><%= obj.FBCountEnd %></td>
+			<td><%= obj.FBCountTotal %></td>
+			<td><%= obj.TwitterCountStart %></td>
+			<td><%= obj.TwitterCountEnd %></td>
+			<td><%= obj.TwitterCountTotal %></td>
+		</tr>
+	<% end %>
+<% end %>
+</table>
+</br>
+<%= will_paginate @result %>
+<% end %>
